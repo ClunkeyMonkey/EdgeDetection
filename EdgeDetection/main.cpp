@@ -22,8 +22,8 @@ int main() {
 
 	GaussianBlur(image, imageGaussian, Size(5, 5), 0, 0);
 	imageGaussian.convertTo(imageGaussian, CV_32F);
-	Sobel(imageGaussian, imageX, -1, 1, 0, 5);
-	Sobel(imageGaussian, imageY, -1, 0, 1, 5);
+	Sobel(imageGaussian, imageX, -1, 1, 0, 3);
+	Sobel(imageGaussian, imageY, -1, 0, 1, 3);
 
 	imageX.convertTo(imageX, CV_32F);
 	imageY.convertTo(imageY, CV_32F);
@@ -46,37 +46,32 @@ int main() {
 		for (x = 1; x < imageG.cols - 1; x++) {
 			float g = imageG.at<float>(y, x);
 			float t = imageT.at<float>(y, x);
-			float i = g;
 			if (g > 0) {
 				if ((((t <= 22.5)) || ((t > 337.5))) || ((t > 157.5) && (t <= 202.5))) {
-					if ((g >= imageG.at<float>(y, x - 1)) || (g >= imageG.at<float>(y, x + 1))) {
-						imageS.at<float>(y, x) = i;
-					}
-					else {
+					if ((g > imageG.at<float>(y, x - 1)) && (g > imageG.at<float>(y, x + 1))) {
+						imageS.at<float>(y, x) = g;
+					} else {
 						imageS.at<float>(y, x) = 0;
 					}
 				}
 				else if (((t > 22.5) && (t <= 67.5)) || ((t > 202.5) && (t <= 247.5))) {
-					if ((g >= imageG.at<float>(y - 1, x + 1)) || (g >= imageG.at<float>(y + 1, x - 1))) {
-						imageS.at<float>(y, x) = i;
-					}
-					else {
+					if ((g > imageG.at<float>(y - 1, x + 1)) && (g > imageG.at<float>(y + 1, x - 1))) {
+						imageS.at<float>(y, x) = g;
+					} else {
 						imageS.at<float>(y, x) = 0;
 					}
 				}
 				else if (((t > 67.5) && (t <= 112.5)) || ((t > 247.5) && (t <= 292.5))) {
-					if ((g >= imageG.at<float>(y - 1, x)) || (g >= imageG.at<float>(y + 1, x))) {
-						imageS.at<float>(y, x) = i;
-					}
-					else {
+					if ((g > imageG.at<float>(y - 1, x)) && (g > imageG.at<float>(y + 1, x))) {
+						imageS.at<float>(y, x) = g;
+					} else {
 						imageS.at<float>(y, x) = 0;
 					}
 				}
 				else if (((t > 112.5) && (t <= 157.5)) || ((t > 292.5) && (t <= 337.5))) {
-					if ((g >= imageG.at<float>(y - 1, x - 1)) || (g >= imageG.at<float>(y + 1, x + 1))) {
-						imageS.at<float>(y, x) = i;
-					}
-					else {
+					if ((g > imageG.at<float>(y - 1, x - 1)) && (g > imageG.at<float>(y + 1, x + 1))) {
+						imageS.at<float>(y, x) = g;
+					} else {
 						imageS.at<float>(y, x) = 0;
 					}
 				}
