@@ -13,9 +13,12 @@ float bT = 20;
 void rabithole(Mat* img, int x, int y);
 
 int main() {
-	Mat image, imageGaussian, imageX, imageY, imageG, imageT, imageS, imageH, imageF;
+	Mat image, imageGaussian, imageX, imageY, imageG, imageT, imageS, imageH, imageF, imageC, imageA;
+	int x = 0;
+	int y = 0;
 	
 	image = imread("Image 1.jpg", CV_LOAD_IMAGE_GRAYSCALE);
+
 	imageGaussian = Mat(image.rows, image.cols, CV_32F);
 	imageX = Mat(image.rows, image.cols, CV_32F);
 	imageY = Mat(image.rows, image.cols, CV_32F);
@@ -27,11 +30,10 @@ int main() {
 
 	GaussianBlur(image, imageGaussian, Size(3, 3), 0, 0);
 	imageGaussian.convertTo(imageGaussian, CV_32F);
+
 	Sobel(imageGaussian, imageX, CV_32F, 1, 0, 3);
 	Sobel(imageGaussian, imageY, CV_32F, 0, 1, 3);
-
-	int x = 0;
-	int y = 0;
+	
 	for (y = 0; y < imageX.rows; y++) {
 		for (x = 0; x < imageX.cols; x++) {
 			float gx = imageX.at<float>(y, x);
@@ -41,6 +43,7 @@ int main() {
 			imageT.at<float>(y, x) = ang;
 		}
 	}
+	
 	for (y = 1; y < imageG.rows - 1; y++) {
 		for (x = 1; x < imageG.cols - 1; x++) {
 			float g = imageG.at<float>(y, x);
@@ -75,8 +78,8 @@ int main() {
 			}
 		}
 	}
+	
 	imageH = imageS.clone();
-	int i;
 	for (y = 1; y < imageH.rows - 1; y++) {
 		for (x = 1; x < imageH.cols - 1; x++) {
 			float val = imageH.at<float>(y, x);
@@ -86,6 +89,7 @@ int main() {
 			}
 		}
 	}
+	
 	for (y = 1; y < imageH.rows - 1; y++) {
 		for (x = 1; x < imageH.cols - 1; x++) {
 			float val = imageH.at<float>(y, x);
@@ -94,6 +98,7 @@ int main() {
 			}
 		}
 	}
+	
 	imwrite("image02_Grey.jpg", image);
 	imwrite("image03_Gaussian.jpg", imageGaussian);
 	imwrite("image04_XComponent.jpg", imageX);
@@ -103,6 +108,9 @@ int main() {
 	imwrite("image08_Suppressed.jpg", imageS);
 	imwrite("image09_Hysteresis.jpg", imageH);
 	imwrite("image10_Final.jpg", imageF);
+
+	Canny(image, imageA, 75, 20);
+	imwrite("image11_CannyAlgorithm.jpg", imageA);
 	return 0;
 }
 
